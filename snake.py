@@ -69,7 +69,7 @@ def rand_apple(free_tiles):
     
     
 
-def game(width=1200,height=800,step_time=200):
+def game(width=1200,height=800,step_time=200,x=20,y=20):
     score = 0
     direct = [1,0]
     width,height =width+2,height+2
@@ -81,7 +81,7 @@ def game(width=1200,height=800,step_time=200):
 
 
     
-    x,y = 20,20
+    x,y = x,y
     
     snake = [[x//2,y//2],[x//2-1,y//2]]
     
@@ -142,11 +142,11 @@ def game(width=1200,height=800,step_time=200):
     if mode == 'menu':
         draw_menu()
     elif mode == 'over':
-        game_over(score,width,height,step_time)
+        game_over(score,width,height,step_time,x,y)
     return
 
 
-def game_over(score,width=1200,height=800,step_time=800):
+def game_over(score,width=1200,height=800,step_time=800,x=20,y=20):
     screen = pg.display.set_mode((width,height))
     clock = pg.time.Clock()
     br = False
@@ -170,7 +170,7 @@ def game_over(score,width=1200,height=800,step_time=800):
         pg.display.set_caption('Game Snake; Score: {}'.format('0'))
         screen.fill((0,0,0))        
     
-    game(width,height,step_time)
+    game(width,height,step_time,x,y)
     return
 
 
@@ -180,7 +180,8 @@ def draw_set():
     screen = pg.display.set_mode((width,height))
     clock = pg.time.Clock()
     
-    questions = [['Width',1200,'1200'],['Height',800,'800'],['StepTime (speed) in s',0.1,'0.1']]
+    questions = [['Width',1200,'1200'],['Height',800,'800'],['StepTime (speed) in s',0.1,'0.1']
+                 ,['x',20,'20'],['y',20,'20']]
     
     buttons = []
     x,y = 200,20
@@ -191,7 +192,7 @@ def draw_set():
         buttons.append([[x+size,y],[x+size,y+size],[x+size*2,y+size],[x+size*2,y]])
         
         if x + size*4 > width:
-            x = 20
+            x = 200
             y += size + 30
         else:
             x += size * 4
@@ -245,7 +246,18 @@ def draw_set():
         step_time = float(questions[2][2])*1000
     except:
         step_time = questions[2][1]*1000
-    draw_menu(width,height,step_time)
+    
+    try:
+        x_=int(questions[3][2])
+    except:
+        x_=questions[3][1]
+    
+    try:
+        y_=int(questions[4][2])
+    except:
+        y_=questions[4][1]
+        
+    draw_menu(width,height,step_time,x_,y_)
     return
 
 
@@ -253,7 +265,7 @@ def draw_set():
 
 
 
-def draw_menu(width=1200,height=800,step_time=200):
+def draw_menu(width=1200,height=800,step_time=200,x=20,y=20):
     screen = pg.display.set_mode((width,height))
     br = False
     mode = ''
@@ -299,7 +311,7 @@ def draw_menu(width=1200,height=800,step_time=200):
         screen.fill((0,0,0))
     
     if mode == 'play':
-        game(width,height,step_time)
+        game(width,height,step_time,x,y)
         return
     elif mode == 'settings':
         draw_set()
